@@ -1,172 +1,439 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shreyash Kawle - Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#about">About Me</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#leadership">Leadership</a></li>
-                <li><a href="#skills">Skills & Awards</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+<html lang="en" data-theme="dark">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description"
+            content="Shreyash Kawle — Software Engineer & Data Analyst. Columbia & CityU HK.">
+        <title>Shreyash Kawle — Portfolio</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js" defer></script>
+    </head>
+    <body>
+        <div class="noise"></div>
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
 
-    <section id="about">
-        <h1>Shreyash Kawle</h1>
-        <article>
-            
-            <p>📸 Here's a quick snapshot for those who prefer their intros short, sweet, and with a dash of humor: </p>
-            <br>
-            <p>🌏 Aspiring Data Analyst and Software Engineer | Exploring the intersection of technology, finance, and the occasional coffee-fueled all-nighter | Actively Engaged in Leadership and Community Service | Columbia University and City University of Hong Kong Student</p>                
-            <br>
-            <p>🚀 About Me:
-                Hello! I'm Shreyash Sanjay Kawle, a driven and enthusiastic student pursuing a dual degree in Computer Science at Columbia University and City University of Hong Kong, projected to graduate in May 2025. My journey in technology and finance is fueled by a deep-rooted passion for creating impactful digital solutions and unraveling complex data insights.
-            </p>
-            <br>
-            <p>💼 Professional Experience:
-                My internships at HSBC and The Hong Kong Jockey Club in Hong Kong honed my skills in data analytics and software engineering. From enhancing customer experiences to contributing to Agile-based product development, I thrive in collaborative environments where teamwork and innovation take center stage.
-            </p>
-            <br>
-            <p>📊 Academic Pursuits:
-                In the academic realm, I immerse myself in research projects like portfolio optimization and cryptocurrency market trends, employing my analytical skills to dissect and understand dynamic market forces.
-            </p>
-            <br>    
-            <p> 
-                🌐 Leadership Roles:
-                Beyond academics, I am actively engaged in leadership roles, including Board Member positions with Liberty in North Korea and the Student of Color Alliance at Columbia University. These roles reflect my commitment to advocacy, diversity, and cultural awareness. 
-            </p>
-            <br>
-            <p>    
-                🔍 Skills and Interests:
-                Equipped with a proficiency in Python, C++, Java, and a suite of data analytics tools, I continually seek to expand my technical expertise. I am also a finalist in prestigious competitions like the Citibank TTS APAC Case Competition and CityU Hack 2022, showcasing my competitive spirit and problem-solving acumen.
-            </p>
-            <br>  
-            <p>  
-                🌟 Aspirations:
-                Looking ahead, I aim to blend my technical knowledge with my keen interest in finance and business, aspiring to make meaningful contributions to the tech and finance sectors. I am excited to connect with like-minded professionals and explore opportunities where I can apply my skills and grow.</p>
-            </p>
-        </article>
-    </section>
+        <header class="site-header">
+            <div class="nav-inner">
+                <a href="#hero" class="logo">
+                    <span class="logo-mark">SK</span>
+                    <span class="logo-dot"></span>
+                </a>
+                <nav>
+                    <ul>
+                        <li><a href="#about">about</a></li>
+                        <li><a href="#experience">work</a></li>
+                        <li><a href="#education">edu</a></li>
+                        <li><a href="#projects">projects</a></li>
+                        <li><a href="#leadership">leadership</a></li>
+                        <li><a href="#skills">skills</a></li>
+                        <li><a href="#contact">contact</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"><circle
+                            cx="12" cy="12" r="4" /><path
+                            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" /></svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"><path
+                            d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+                </button>
+                <button class="menu-toggle" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </header>
 
-    <section id="education">
-        <h2>Education</h2>
-        <article>
-            <h3>Columbia University in the City of New York</h3>
-            <p>Bachelor’s in Computer Science</p>
-            <p>Expected May 2025</p>
-        </article>
-        <article>
-            <h3>Stanford University, California</h3>
-            <p>Visiting Summer Undergraduate Student</p>
-            <p>June 2023 – August 2023</p>
-        </article>
-        <article>
-            <h3>City University of Hong Kong</h3>
-            <p>Bachelor’s in Computer Science</p>
-            <p>August 2020 – May 2023</p>
-            <p>Joint Bachelor’s Degree Program with Columbia University</p>
-        </article>
-    </section>
-    
-    <section id="experience">
-        <h2>Work Experience</h2>
-        <article>
-            <h3>Data Analyst Intern, HSBC, Hong Kong</h3>
-            <p>January 2023 – June 2023</p>
-            <p>At HSBC, I immersed myself in the world of commercial banking data analytics. My primary accomplishment was enhancing the customer onboarding experience by meticulously analyzing over 10,000 data assets. Developing an automated dashboard using Python, pivot tables, SAS, and VBA was not only a technical feat but also a testament to my problem-solving abilities. Presenting CRM and Wholesale Banking insights to senior stakeholders honed my skills in data visualization and communication. I also created confluence pages for data asset organization, which improved team understanding and efficiency. Collaborating with a diverse team of professionals, I enhanced my interpersonal skills and learned the importance of clear, concise communication in a corporate setting.</p>
-        </article>
-        <article>
-            <h3>Software Engineering Intern, The Hong Kong Jockey Club</h3>
-            <p>July 2022 - December 2022</p>
-            <p>My tenure at The Hong Kong Jockey Club was a blend of technical prowess and project management. Working on the Cash-Out Systems Integration project, I not only contributed to a better user experience and increased firm revenue but also got a firsthand experience in agile project management. This role required me to balance technical development with project coordination tasks, enhancing my multi-tasking and organizational skills. The dynamic and fast-paced environment at the club was instrumental in sharpening my adaptability and resilience, crucial traits in any professional setting.</p>
-        </article>
-        <article>
-            <h3>Junior Data Analyst, CityU HK</h3>
-            <p>November 2021 – April 2022</p>
-            <p>In this role, I managed and analyzed over 9,000 data entries weekly during the admissions cycle. The responsibility of handling sensitive demographic data assets taught me the importance of accuracy and attention to detail. Working in the educational sector provided a unique perspective on data analysis and its impact on student admissions. My interactions with a diverse range of team members and stakeholders improved my cross-cultural communication skills and broadened my understanding of global perspectives in education.</p>
-        </article>
-        <!-- Add more experiences as needed -->
-    </section>
+        <main>
+            <section id="hero" class="hero reveal">
+                <div class="hero-tag">
+                    <span class="pulse"></span>
+                    <span>available for opportunities</span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="line">hey, i'm</span>
+                    <span class="line gradient-text">shreyash.</span>
+                    <span class="line sub">software engineer <span
+                            class="amp">&amp;</span> data person</span>
+                </h1>
+                <p class="hero-copy">
+                    Building at the intersection of <em>code</em>,
+                    <em>finance</em>, and the occasional
+                    coffee-fueled all-nighter. Columbia <span
+                        class="slash">/</span> CityU HK dual-degree, shipping
+                    things that matter.
+                </p>
+                <div class="hero-cta">
+                    <a href="#experience" class="btn btn-primary">
+                        <span>see my work</span>
+                        <svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"><path
+                                d="M5 12h14M13 5l7 7-7 7" /></svg>
+                    </a>
+                    <a href="#contact" class="btn btn-ghost">get in touch</a>
+                </div>
+                <div class="hero-meta">
+                    <div class="meta-item"><span
+                            class="meta-k">based</span><span class="meta-v">NYC
+                            · HK</span></div>
+                    <div class="meta-item"><span
+                            class="meta-k">stack</span><span class="meta-v">Py ·
+                            Java · C++ · SQL</span></div>
+                    <div class="meta-item"><span class="meta-k">grad</span><span
+                            class="meta-v">May 2025</span></div>
+                </div>
+            </section>
 
-    <section id="projects">
-        <h2>Research Projects</h2>
-        <article>
-            <h3>Portfolio Optimization and Market Indexes Tracking</h3>
-            <p>Implemented various convex optimization techniques to stock prices datasets and evaluated different portfolio formulations.</p>
-            <p>July 2022 – June 2023</p>
-        </article>
-        <article>
-            <h3>Research Assistant, CityU HK</h3>
-            <p>Analyzed market capitalization and prices data for 500+ crypto coins, and applied NLP techniques to financial reports.</p>
-            <p>April 2021 – December 2021</p>
-        </article>
-        <!-- Add more projects as needed -->
-    </section>
+            <section id="about" class="section reveal">
+                <div class="section-head">
+                    <span class="section-idx">01</span>
+                    <h2>about me</h2>
+                </div>
+                <div class="about-grid">
+                    <div class="about-card card-primary">
+                        <div class="card-emoji">🚀</div>
+                        <h3>the short version</h3>
+                        <p>Driven student-engineer pursuing a dual CS degree at
+                            Columbia University and City University of Hong
+                            Kong. I build impactful digital tools and love
+                            unpacking messy data until it tells a story.</p>
+                    </div>
+                    <div class="about-card">
+                        <div class="card-emoji">💼</div>
+                        <h3>what i do</h3>
+                        <p>Internships at HSBC and The Hong Kong Jockey Club
+                            sharpened my chops in data analytics and agile
+                            software engineering. I thrive where teamwork meets
+                            technical depth.</p>
+                    </div>
+                    <div class="about-card">
+                        <div class="card-emoji">📊</div>
+                        <h3>what i research</h3>
+                        <p>Portfolio optimization, crypto market dynamics, NLP
+                            on financial reports. Using analytics to make sense
+                            of chaotic markets.</p>
+                    </div>
+                    <div class="about-card">
+                        <div class="card-emoji">🌐</div>
+                        <h3>what i care about</h3>
+                        <p>Board roles with Liberty in North Korea and the
+                            Student of Color Alliance at Columbia. Advocacy,
+                            diversity, cultural awareness — not as side quests,
+                            as core values.</p>
+                    </div>
+                </div>
+            </section>
 
-    <section id="leadership">
-        <h2>Leadership Experiences</h2>
-        <article>
-            <h3>Board Member, Liberty in North Korea, Columbia</h3>
-            <p>Advocating for North Korean human rights and organizing fundraising campaigns and awareness events.</p>
-            <p>September 2023 – Present</p>
-        </article>
-        <article>
-            <h3>Board Member, Student of Color Alliance, Columbia</h3>
-            <p>Promoting diversity and inclusivity on campus through various events and workshops.</p>
-            <p>September 2023 – Present</p>
-        </article>
-        <article>
-            <h3>Manager, AIESEC at CityU HK</h3>
-            <p>Managed international student exchange programs and organized cultural engagement events.</p>
-            <p>September 2021 – May 2022</p>
-        </article>
-        <!-- Add more leadership roles as needed -->
-    </section>
+            <section id="experience" class="section reveal">
+                <div class="section-head">
+                    <span class="section-idx">02</span>
+                    <h2>work experience</h2>
+                </div>
+                <div class="timeline">
+                    <article class="timeline-item">
+                        <div class="tl-meta">
+                            <span class="tl-date">Jan 2023 — Jun 2023</span>
+                            <span class="tl-loc">Hong Kong</span>
+                        </div>
+                        <div class="tl-body">
+                            <h3>Data Analyst Intern <span class="at">@</span>
+                                <span class="co">HSBC</span></h3>
+                            <p>Revamped commercial-banking onboarding by
+                                analyzing 10,000+ data assets. Built an
+                                automated dashboard in Python + pivot tables +
+                                SAS + VBA, presented CRM and Wholesale Banking
+                                insights to senior stakeholders, and shipped
+                                Confluence docs that actually got read.</p>
+                            <div class="chips">
+                                <span class="chip">Python</span><span
+                                    class="chip">SAS</span><span
+                                    class="chip">VBA</span><span
+                                    class="chip">Data Viz</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="timeline-item">
+                        <div class="tl-meta">
+                            <span class="tl-date">Jul 2022 — Dec 2022</span>
+                            <span class="tl-loc">Hong Kong</span>
+                        </div>
+                        <div class="tl-body">
+                            <h3>Software Engineering Intern <span
+                                    class="at">@</span> <span class="co">The
+                                    Hong Kong Jockey Club</span></h3>
+                            <p>Worked on the Cash-Out Systems Integration
+                                project — improved UX, moved revenue, lived the
+                                full agile sprint-cycle life. Balanced dev work
+                                with project coordination in a genuinely
+                                fast-paced environment.</p>
+                            <div class="chips">
+                                <span class="chip">Agile</span><span
+                                    class="chip">Systems Integration</span><span
+                                    class="chip">Java</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="timeline-item">
+                        <div class="tl-meta">
+                            <span class="tl-date">Nov 2021 — Apr 2022</span>
+                            <span class="tl-loc">Hong Kong</span>
+                        </div>
+                        <div class="tl-body">
+                            <h3>Junior Data Analyst <span class="at">@</span>
+                                <span class="co">CityU HK</span></h3>
+                            <p>Managed 9,000+ weekly data entries during
+                                admissions. Handled sensitive demographic data
+                                with the attention to detail it deserved,
+                                collaborating across a culturally diverse
+                                team.</p>
+                            <div class="chips">
+                                <span class="chip">Data Mgmt</span><span
+                                    class="chip">SQL</span><span
+                                    class="chip">Excel</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
 
-    <section id="skills">
-        <h2>Skills & Awards</h2>
-        <article>
-            <p>Technical Skills: Data Analytics, Data Visualization, Data Mining, Machine Learning, Web Development, and more.</p>
-            <p>Software Skills: Microsoft Office, G-Suite, Python, C++, Java, MySQL, Matlab.</p>
-            <p>Languages: English (TOEFL - 104/120), Hindi (Native).</p>
-            <p>Competitions: Citibank TTS APAC Case Competition 2022 (APAC Regional Finalist), CityU Hack 2022 (Finalist)</p>
-        </article>
-    </section>
+            <section id="education" class="section reveal">
+                <div class="section-head">
+                    <span class="section-idx">03</span>
+                    <h2>education</h2>
+                </div>
+                <div class="edu-grid">
+                    <article class="edu-card">
+                        <div class="edu-badge">BS</div>
+                        <h3>Columbia University</h3>
+                        <p class="edu-sub">New York, NY</p>
+                        <p class="edu-degree">Bachelor's in Computer Science</p>
+                        <p class="edu-date">Expected May 2025</p>
+                    </article>
+                    <article class="edu-card">
+                        <div class="edu-badge">Visiting</div>
+                        <h3>Stanford University</h3>
+                        <p class="edu-sub">California</p>
+                        <p class="edu-degree">Visiting Summer Undergraduate
+                            Student</p>
+                        <p class="edu-date">Jun 2023 — Aug 2023</p>
+                    </article>
+                    <article class="edu-card">
+                        <div class="edu-badge">BS</div>
+                        <h3>City University of Hong Kong</h3>
+                        <p class="edu-sub">Kowloon, HK</p>
+                        <p class="edu-degree">Bachelor's in Computer Science —
+                            Joint Program with Columbia</p>
+                        <p class="edu-date">Aug 2020 — May 2023</p>
+                    </article>
+                </div>
+            </section>
 
-    <section id="contact">
-        <h2>Contact</h2>
-        <p>Feel free to reach out for collaboration or queries:</p>
-        <p>Email: shreyash.kawle@columbia.edu</p>
-        <p>LinkedIn: <a href="https://www.linkedin.com/in/shreyash-kawle/">linkedin.com/in/shreyash-kawle</a></p>
-        <p>GitHub: <a href="https://github.com/SSK2822">github.com/SSK2822</a></p>
-        <form action="submit_form.php" method="POST">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" placeholder="Your Name" required>
-    
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="Your Email" required>
-    
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" placeholder="Your Message" required></textarea>
-    
-            <button type="submit">Send Message</button>
-        </form>
-    </section>
+            <section id="projects" class="section reveal">
+                <div class="section-head">
+                    <span class="section-idx">04</span>
+                    <h2>research &amp; projects</h2>
+                </div>
+                <div class="project-grid">
+                    <article class="project-card">
+                        <div class="proj-head">
+                            <h3>Portfolio Optimization &amp; Market Index
+                                Tracking</h3>
+                            <span class="proj-year">2022 — 23</span>
+                        </div>
+                        <p>Applied convex optimization techniques to real
+                            stock-price datasets; benchmarked several portfolio
+                            formulations and evaluated tracking error against
+                            public indices.</p>
+                        <div class="chips">
+                            <span class="chip">Convex Opt</span><span
+                                class="chip">Python</span><span
+                                class="chip">Finance</span>
+                        </div>
+                    </article>
+                    <article class="project-card">
+                        <div class="proj-head">
+                            <h3>Crypto Markets &amp; NLP on Financial
+                                Reports</h3>
+                            <span class="proj-year">2021 — 22</span>
+                        </div>
+                        <p>Research Assistant at CityU HK — analyzed market-cap
+                            and price data for 500+ crypto assets and ran NLP
+                            pipelines over financial reports to extract
+                            sentiment signals.</p>
+                        <div class="chips">
+                            <span class="chip">NLP</span><span
+                                class="chip">Python</span><span
+                                class="chip">Time Series</span>
+                        </div>
+                    </article>
+                    <article class="project-card project-soon">
+                        <div class="proj-head">
+                            <h3>More in the oven</h3>
+                            <span class="proj-year">soon™</span>
+                        </div>
+                        <p>New projects incoming — check back in a bit.</p>
+                    </article>
+                </div>
+            </section>
 
-    <footer>
-        <p>&copy; 2023 Shreyash Kawle</p>
-    </footer>
-    <javascript src="script.js"></javascript>
-</body>
+            <section id="leadership" class="section reveal">
+                <div class="section-head">
+                    <span class="section-idx">05</span>
+                    <h2>leadership</h2>
+                </div>
+                <div class="leader-grid">
+                    <article class="leader-card">
+                        <h3>Board Member</h3>
+                        <p class="leader-org">Liberty in North Korea —
+                            Columbia</p>
+                        <p>Advocating for North Korean human rights, organizing
+                            fundraising campaigns and awareness events.</p>
+                        <span class="leader-date">Sep 2023 — Present</span>
+                    </article>
+                    <article class="leader-card">
+                        <h3>Board Member</h3>
+                        <p class="leader-org">Student of Color Alliance —
+                            Columbia</p>
+                        <p>Building diversity and inclusivity on campus through
+                            regular events and workshops.</p>
+                        <span class="leader-date">Sep 2023 — Present</span>
+                    </article>
+                    <article class="leader-card">
+                        <h3>Manager</h3>
+                        <p class="leader-org">AIESEC — CityU HK</p>
+                        <p>Ran international student exchange programs and
+                            organized cultural engagement events.</p>
+                        <span class="leader-date">Sep 2021 — May 2022</span>
+                    </article>
+                </div>
+            </section>
+
+            <section id="skills" class="section reveal">
+                <div class="section-head">
+                    <span class="section-idx">06</span>
+                    <h2>skills &amp; awards</h2>
+                </div>
+                <div class="skills-wrap">
+                    <div class="skill-block">
+                        <h4>technical</h4>
+                        <div class="chips chips-lg">
+                            <span class="chip">Data Analytics</span>
+                            <span class="chip">Data Visualization</span>
+                            <span class="chip">Data Mining</span>
+                            <span class="chip">Machine Learning</span>
+                            <span class="chip">Web Dev</span>
+                        </div>
+                    </div>
+                    <div class="skill-block">
+                        <h4>software &amp; languages</h4>
+                        <div class="chips chips-lg">
+                            <span class="chip">Python</span>
+                            <span class="chip">C++</span>
+                            <span class="chip">Java</span>
+                            <span class="chip">MySQL</span>
+                            <span class="chip">MATLAB</span>
+                            <span class="chip">Microsoft Office</span>
+                            <span class="chip">G-Suite</span>
+                        </div>
+                    </div>
+                    <div class="skill-block">
+                        <h4>languages</h4>
+                        <div class="chips chips-lg">
+                            <span class="chip">English — TOEFL 104/120</span>
+                            <span class="chip">Hindi — Native</span>
+                        </div>
+                    </div>
+                    <div class="skill-block awards">
+                        <h4>awards</h4>
+                        <ul class="award-list">
+                            <li><span>🏆</span> Citibank TTS APAC Case
+                                Competition 2022 — APAC Regional Finalist</li>
+                            <li><span>🥇</span> CityU Hack 2022 — Finalist</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" class="section reveal">
+                <div class="section-head">
+                    <span class="section-idx">07</span>
+                    <h2>let's talk</h2>
+                </div>
+                <div class="contact-wrap">
+                    <div class="contact-intro">
+                        <h3>Got something cool to build?</h3>
+                        <p>Open to software engineering roles, data-analytics
+                            work, and interesting collaborations. Fastest way to
+                            reach me is email.</p>
+                        <div class="contact-links">
+                            <a class="contact-link"
+                                href="mailto:shreyash.kawle@columbia.edu">
+                                <span class="cl-label">email</span>
+                                <span
+                                    class="cl-value">shreyash.kawle@columbia.edu</span>
+                            </a>
+                            <a class="contact-link"
+                                href="https://www.linkedin.com/in/shreyash-kawle/"
+                                target="_blank" rel="noopener">
+                                <span class="cl-label">linkedin</span>
+                                <span class="cl-value">in/shreyash-kawle
+                                    ↗</span>
+                            </a>
+                            <a class="contact-link"
+                                href="https://github.com/SSK2822"
+                                target="_blank" rel="noopener">
+                                <span class="cl-label">github</span>
+                                <span class="cl-value">@SSK2822 ↗</span>
+                            </a>
+                        </div>
+                    </div>
+                    <form class="contact-form" action="submit_form.php"
+                        method="POST">
+                        <label>
+                            <span>name</span>
+                            <input type="text" id="name" name="name"
+                                placeholder="what should I call you?" required>
+                        </label>
+                        <label>
+                            <span>email</span>
+                            <input type="email" id="email" name="email"
+                                placeholder="where should I reply?" required>
+                        </label>
+                        <label>
+                            <span>message</span>
+                            <textarea id="message" name="message" rows="5"
+                                placeholder="what's on your mind?"
+                                required></textarea>
+                        </label>
+                        <button type="submit">
+                            <span>send it</span>
+                            <svg viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"><path
+                                    d="M5 12h14M13 5l7 7-7 7" /></svg>
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-inner">
+                <p class="copy">&copy; <span id="year">2025</span> Shreyash
+                    Kawle. Built with love and too much coffee.</p>
+                <p class="built">vanilla html · css · js</p>
+            </div>
+        </footer>
+    </body>
 </html>
