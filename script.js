@@ -81,41 +81,65 @@
   );
   sections.forEach((s) => sectionObs.observe(s));
 
-  // ===== Parallax orbs (subtle, only if motion allowed) =====
+  // ===== Floating orbs — sine-wave drift, no scroll interference =====
   const reduceMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
   if (!reduceMotion) {
-    const orb1 = document.querySelector(".orb-1");
-    const orb2 = document.querySelector(".orb-2");
-    let ticking = false;
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          const y = window.scrollY;
-          if (orb1) orb1.style.transform = `translate3d(0, ${y * 0.15}px, 0)`;
-          if (orb2) orb2.style.transform = `translate3d(0, ${y * -0.12}px, 0)`;
-          ticking = false;
-        });
-      },
-      { passive: true },
-    );
+    const orbConfigs = [
+      { el: document.querySelector(".orb-1"), x0: -14, y0: -14, rx: 18, ry: 22, sx: 0.00023, sy: 0.00031 },
+      { el: document.querySelector(".orb-2"), x0: 72, y0: 68, rx: 20, ry: 16, sx: 0.00019, sy: 0.00027 },
+      { el: document.querySelector(".orb-3"), x0: 55, y0: 30, rx: 24, ry: 20, sx: 0.00015, sy: 0.00021 },
+    ];
+
+    // x0/y0 as % of viewport, rx/ry as px radius of drift
+    function tickOrbs(ts) {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      for (const c of orbConfigs) {
+        if (!c.el) continue;
+        const cx = (c.x0 / 100) * vw + Math.sin(ts * c.sx) * c.rx;
+        const cy = (c.y0 / 100) * vh + Math.cos(ts * c.sy) * c.ry;
+        c.el.style.left = `${cx}px`;
+        c.el.style.top  = `${cy}px`;
+      }
+      requestAnimationFrame(tickOrbs);
+    }
+    requestAnimationFrame(tickOrbs);
   }
 
-  // ===== Form validation =====
-  const form = document.querySelector(".contact-form");
+  // ===== Contact form — mailto-based submission =====
+  const form = document.querySelector("#contact-form");
+  const submitBtn = document.querySelector("#form-submit-btn");
+  const statusEl = document.querySelector("#form-status");
+
   form?.addEventListener("submit", (e) => {
+    e.preventDefault();
     const name = form.querySelector("#name")?.value.trim();
     const email = form.querySelector("#email")?.value.trim();
     const message = form.querySelector("#message")?.value.trim();
+
     if (!name || !email || !message) {
-      e.preventDefault();
-      alert("please fill in all the fields ✌️");
+      showFormStatus("please fill in all the fields ✌️", "error");
+      return;
     }
+
+    const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+    const body = encodeURIComponent(
+      `Hi Yash,\n\nYou have a new message from your portfolio.\n\nFrom: ${name}\nEmail: ${email}\n\nMessage:\n${message}\n`
+    );
+    const mailto = `mailto:sk5109@columbia.edu?subject=${subject}&body=${body}`;
+
+    window.location.href = mailto;
+    showFormStatus("your email app should open now — thanks for reaching out!", "success");
+    form.reset();
   });
+
+  function showFormStatus(msg, type) {
+    if (!statusEl) return;
+    statusEl.textContent = msg;
+    statusEl.className = `form-status form-status--${type}`;
+  }
 
   // ===== Dynamic year =====
   const yearEl = document.getElementById("year");

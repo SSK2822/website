@@ -100,6 +100,12 @@ ul {
     color: #fff;
 }
 
+/* ===== Keyframe animations ===== */
+@keyframes orb-breathe {
+    0%, 100% { opacity: 0.28; }
+    50%       { opacity: 0.42; }
+}
+
 /* ===== Ambient decoration ===== */
 .noise {
     position: fixed;
@@ -112,7 +118,42 @@ ul {
 }
 
 [data-theme="dark"] .noise {
-    opacity: 0.08;
+    opacity: 0.06;
+}
+
+/* Subtle dot-grid for that gamey/sci-fi feel */
+.dot-grid {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.18) 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+
+[data-theme="dark"] .dot-grid {
+    opacity: 1;
+}
+
+/* Very faint scanlines */
+.scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0, 0, 0, 0.06) 3px,
+        rgba(0, 0, 0, 0.06) 4px
+    );
+}
+
+[data-theme="dark"] .scanlines {
+    opacity: 1;
 }
 
 .gradient-orb {
@@ -121,28 +162,37 @@ ul {
     filter: blur(90px);
     pointer-events: none;
     z-index: 0;
-    opacity: 0.55;
+    will-change: transform;
     transition: opacity var(--t-slow);
+    animation: orb-breathe 6s ease-in-out infinite;
 }
 
 .orb-1 {
-    width: 520px;
-    height: 520px;
-    background: radial-gradient(circle, #ff5a1f 0%, transparent 70%);
-    top: -120px;
-    left: -120px;
+    width: 560px;
+    height: 560px;
+    background: radial-gradient(circle, #ff5a1f 0%, #ff3a6e 50%, transparent 70%);
+    opacity: 0.32;
+    animation-delay: 0s;
 }
 
 .orb-2 {
-    width: 480px;
-    height: 480px;
-    background: radial-gradient(circle, #7c3aed 0%, transparent 70%);
-    bottom: -140px;
-    right: -140px;
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, #7c3aed 0%, #4f46e5 50%, transparent 70%);
+    opacity: 0.28;
+    animation-delay: -2s;
 }
 
-[data-theme="dark"] .gradient-orb {
-    opacity: 0.35;
+.orb-3 {
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, #06b6d4 0%, #0ea5e9 40%, transparent 70%);
+    opacity: 0.25;
+    animation-delay: -4s;
+}
+
+[data-theme="light"] .gradient-orb {
+    opacity: 0.12;
 }
 
 /* ===== Header / nav ===== */
@@ -412,6 +462,14 @@ main {
     color: var(--accent);
     font-style: italic;
     font-weight: 400;
+}
+
+.sep {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-weight: 700;
+    text-shadow: 0 0 10px var(--accent), 0 0 24px var(--accent);
+    margin-left: 1px;
 }
 
 .gradient-text {
@@ -745,6 +803,12 @@ main {
     font-size: 0.95rem;
 }
 
+.edu-note {
+    font-size: 0.82rem;
+    color: var(--accent);
+    margin-bottom: 6px;
+}
+
 .edu-date {
     font-family: var(--font-mono);
     font-size: 0.78rem;
@@ -1026,6 +1090,42 @@ main {
 
 .contact-form button:hover svg {
     transform: translateX(3px);
+}
+
+.contact-form button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.form-status {
+    font-size: 0.88rem;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    display: none;
+}
+
+.form-status--success {
+    display: block;
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.form-status--error {
+    display: block;
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.award-list a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.award-list a:hover {
+    text-decoration: underline;
 }
 
 /* ===== Footer ===== */
