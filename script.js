@@ -348,7 +348,7 @@
   }
 
   function resize() {
-    const w = Math.min(Math.floor((canvas.parentElement.clientWidth - 2) / CELL) * CELL, 360);
+    const w = Math.floor((canvas.parentElement.clientWidth - 2) / CELL) * CELL;
     canvas.width = canvas.height = w;
     cols = rows = w / CELL;
   }
