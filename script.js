@@ -173,6 +173,340 @@
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 })();
 
+// ===== Scroll progress =====
+(() => {
+  const bar = document.getElementById("scroll-progress");
+  if (!bar) return;
+  window.addEventListener("scroll", () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = max > 0 ? `${(window.scrollY / max) * 100}%` : "0%";
+  }, { passive: true });
+})();
+
+// ===== Command Palette =====
+(() => {
+  const COMMANDS = [
+    { group: "Go to", label: "about me",           icon: "01", type: "nav",    target: "#about" },
+    { group: "Go to", label: "work experience",    icon: "02", type: "nav",    target: "#experience" },
+    { group: "Go to", label: "education",          icon: "03", type: "nav",    target: "#education" },
+    { group: "Go to", label: "projects",           icon: "04", type: "nav",    target: "#projects" },
+    { group: "Go to", label: "leadership",         icon: "05", type: "nav",    target: "#leadership" },
+    { group: "Go to", label: "skills & awards",    icon: "06", type: "nav",    target: "#skills" },
+    { group: "Go to", label: "play games 🎮",      icon: "07", type: "nav",    target: "#play" },
+    { group: "Go to", label: "contact",            icon: "08", type: "nav",    target: "#contact" },
+    { group: "Links", label: "email yash",         icon: "✉",  type: "link",   href: "mailto:sk5109@columbia.edu" },
+    { group: "Links", label: "linkedin ↗",         icon: "in", type: "link",   href: "https://www.linkedin.com/in/shreyash-kawle/" },
+    { group: "Links", label: "github ↗",           icon: "gh", type: "link",   href: "https://github.com/SSK2822" },
+    { group: "Actions", label: "toggle theme",     icon: "◐",  type: "action", action: "theme" },
+  ];
+
+  const palette  = document.getElementById("cmd-palette");
+  const backdrop = document.getElementById("cmd-backdrop");
+  const inputEl  = document.getElementById("cmd-input");
+  const resultsEl = document.getElementById("cmd-results");
+  if (!palette) return;
+
+  let isOpen = false, activeIdx = 0, filtered = [];
+
+  function open() {
+    isOpen = true;
+    palette.classList.add("open");
+    palette.setAttribute("aria-hidden", "false");
+    inputEl.value = "";
+    filter();
+    inputEl.focus();
+  }
+
+  function close() {
+    isOpen = false;
+    palette.classList.remove("open");
+    palette.setAttribute("aria-hidden", "true");
+  }
+
+  function filter() {
+    const q = inputEl.value.toLowerCase().trim();
+    filtered = q
+      ? COMMANDS.filter(c => c.label.toLowerCase().includes(q) || c.group.toLowerCase().includes(q))
+      : COMMANDS;
+    activeIdx = 0;
+    render();
+  }
+
+  function render() {
+    const groups = {};
+    filtered.forEach(c => { (groups[c.group] = groups[c.group] || []).push(c); });
+    resultsEl.innerHTML = "";
+    let idx = 0;
+    Object.entries(groups).forEach(([grp, cmds]) => {
+      const lbl = document.createElement("div");
+      lbl.className = "cmd-group-label";
+      lbl.textContent = grp;
+      resultsEl.appendChild(lbl);
+      cmds.forEach(cmd => {
+        const el = document.createElement("div");
+        el.className = "cmd-item" + (idx === activeIdx ? " active" : "");
+        el.dataset.idx = idx;
+        el.innerHTML = `<span class="cmd-item-icon">${cmd.icon}</span><span class="cmd-item-label">${cmd.label}</span><span class="cmd-item-tag">${cmd.type}</span>`;
+        el.addEventListener("click", () => execute(cmd));
+        el.addEventListener("mouseover", () => { activeIdx = +el.dataset.idx; render(); });
+        resultsEl.appendChild(el);
+        idx++;
+      });
+    });
+    const active = resultsEl.querySelector(".active");
+    active?.scrollIntoView({ block: "nearest" });
+  }
+
+  function execute(cmd) {
+    close();
+    if (cmd.type === "nav") {
+      document.querySelector(cmd.target)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (cmd.type === "link") {
+      window.open(cmd.href, "_blank", "noopener");
+    } else if (cmd.type === "action" && cmd.action === "theme") {
+      document.querySelector(".theme-toggle")?.click();
+    }
+  }
+
+  document.addEventListener("keydown", e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "k") { e.preventDefault(); isOpen ? close() : open(); return; }
+    if (!isOpen) return;
+    if (e.key === "Escape")    { close(); return; }
+    if (e.key === "ArrowDown") { e.preventDefault(); activeIdx = Math.min(activeIdx + 1, filtered.length - 1); render(); return; }
+    if (e.key === "ArrowUp")   { e.preventDefault(); activeIdx = Math.max(activeIdx - 1, 0); render(); return; }
+    if (e.key === "Enter")     { e.preventDefault(); if (filtered[activeIdx]) execute(filtered[activeIdx]); return; }
+  });
+
+  inputEl.addEventListener("input", filter);
+  backdrop.addEventListener("click", close);
+  document.getElementById("cmd-trigger")?.addEventListener("click", open);
+})();
+
+// ===== Snake =====
+(() => {
+  const THEMES = {
+    drift:  { head: [255,107,61],  tail: [167,139,250], food: "#2dd4bf", foodGlow: "#2dd4bf",               headGlow: "rgba(255,107,61,0.55)"  },
+    matrix: { head: [0,255,65],    tail: [0,100,25],    food: "#00ff41", foodGlow: "#00ff41",               headGlow: "rgba(0,255,65,0.6)"     },
+    neon:   { head: [0,212,255],   tail: [255,0,255],   food: "#ff00ff", foodGlow: "#ff00ff",               headGlow: "rgba(0,212,255,0.6)"    },
+    fire:   { head: [255,200,0],   tail: [255,20,0],    food: "#ff8c00", foodGlow: "#ff8c00",               headGlow: "rgba(255,150,0,0.6)"    },
+    candy:  { head: [255,105,180], tail: [199,21,133],  food: "#ff69b4", foodGlow: "#ff69b4",               headGlow: "rgba(255,105,180,0.6)"  },
+    ghost:  { head: [240,240,240], tail: [80,80,80],    food: "#ffffff", foodGlow: "rgba(255,255,255,0.7)", headGlow: "rgba(220,220,220,0.5)"  },
+  };
+  const SPEEDS = { slow: 200, normal: 130, fast: 75 };
+
+  let currentTheme = localStorage.getItem("sk-snake-theme") || "drift";
+  let currentSpeed = localStorage.getItem("sk-snake-speed") || "normal";
+  if (!THEMES[currentTheme]) currentTheme = "drift";
+  if (!SPEEDS[currentSpeed]) currentSpeed = "normal";
+
+  // ---- score history ----
+  function getHistory() {
+    try { return JSON.parse(localStorage.getItem("sk-snake-history") || "[]"); } catch { return []; }
+  }
+  function saveToHistory(s) {
+    const h = getHistory();
+    h.unshift(s);
+    if (h.length > 8) h.length = 8;
+    localStorage.setItem("sk-snake-history", JSON.stringify(h));
+  }
+  function renderHistory() {
+    const el = document.getElementById("score-history");
+    if (!el) return;
+    const h = getHistory();
+    el.innerHTML = h.length
+      ? h.map((s, i) => `<div class="history-item"><span class="history-rank">#${i + 1}</span><span class="history-score">${s}</span></div>`).join("")
+      : '<span class="history-empty">no games yet</span>';
+  }
+  function renderBest() {
+    const el = document.getElementById("snake-best");
+    if (el) el.textContent = hiScore;
+  }
+
+  const canvas       = document.getElementById("snake-canvas");
+  const scoreEl      = document.getElementById("snake-score");
+  const overlay      = document.getElementById("snake-overlay");
+  const overlayScore = document.getElementById("snake-overlay-score");
+  if (!canvas) return;
+
+  const ctx  = canvas.getContext("2d");
+  const CELL = 18;
+  let cols, rows, snake, dir, nextDir, food, score, hiScore, running, rafId, lastTick;
+  hiScore = parseInt(localStorage.getItem("sk-snake-hi") || "0");
+
+  function rrect(x, y, w, h, r) {
+    ctx.beginPath();
+    if (ctx.roundRect) { ctx.roundRect(x, y, w, h, r); }
+    else {
+      const rad = Math.min(r, w / 2, h / 2);
+      ctx.moveTo(x + rad, y);
+      ctx.lineTo(x + w - rad, y); ctx.arcTo(x + w, y, x + w, y + rad, rad);
+      ctx.lineTo(x + w, y + h - rad); ctx.arcTo(x + w, y + h, x + w - rad, y + h, rad);
+      ctx.lineTo(x + rad, y + h); ctx.arcTo(x, y + h, x, y + h - rad, rad);
+      ctx.lineTo(x, y + rad); ctx.arcTo(x, y, x + rad, y, rad);
+      ctx.closePath();
+    }
+  }
+
+  function resize() {
+    const w = Math.min(Math.floor((canvas.parentElement.clientWidth - 2) / CELL) * CELL, 360);
+    canvas.width = canvas.height = w;
+    cols = rows = w / CELL;
+  }
+
+  function reset() {
+    resize();
+    const mx = Math.floor(cols / 2), my = Math.floor(rows / 2);
+    snake   = [{ x: mx, y: my }, { x: mx - 1, y: my }, { x: mx - 2, y: my }];
+    dir     = { x: 1, y: 0 };
+    nextDir = { x: 1, y: 0 };
+    score   = 0;
+    if (scoreEl) scoreEl.textContent = "0";
+    spawnFood();
+    draw();
+  }
+
+  function spawnFood() {
+    let p;
+    do { p = { x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows) }; }
+    while (snake.some(s => s.x === p.x && s.y === p.y));
+    food = p;
+  }
+
+  function draw() {
+    const th = THEMES[currentTheme];
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // subtle dot grid
+    ctx.fillStyle = "rgba(255,255,255,0.03)";
+    for (let x = 0; x < cols; x++) for (let y = 0; y < rows; y++) {
+      ctx.beginPath(); ctx.arc(x * CELL + CELL / 2, y * CELL + CELL / 2, 1, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // food
+    ctx.save();
+    ctx.shadowColor = th.foodGlow; ctx.shadowBlur = 14;
+    ctx.fillStyle = th.food;
+    rrect(food.x * CELL + 4, food.y * CELL + 4, CELL - 8, CELL - 8, 4);
+    ctx.fill();
+    ctx.restore();
+
+    // snake
+    snake.forEach((seg, i) => {
+      const t = i / Math.max(snake.length - 1, 1);
+      const r = Math.round(th.head[0] * (1 - t) + th.tail[0] * t);
+      const g = Math.round(th.head[1] * (1 - t) + th.tail[1] * t);
+      const b = Math.round(th.head[2] * (1 - t) + th.tail[2] * t);
+      ctx.save();
+      if (i === 0) { ctx.shadowColor = th.headGlow; ctx.shadowBlur = 12; }
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      rrect(seg.x * CELL + 2, seg.y * CELL + 2, CELL - 4, CELL - 4, i === 0 ? 6 : 4);
+      ctx.fill();
+      ctx.restore();
+    });
+  }
+
+  function tick() {
+    dir = nextDir;
+    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+    if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows || snake.some(s => s.x === head.x && s.y === head.y)) {
+      endGame(); return;
+    }
+    snake.unshift(head);
+    if (head.x === food.x && head.y === food.y) {
+      score++;
+      if (scoreEl) scoreEl.textContent = score;
+      spawnFood();
+    } else { snake.pop(); }
+    draw();
+  }
+
+  function loop(ts) {
+    if (ts - lastTick >= SPEEDS[currentSpeed]) { tick(); lastTick = ts; }
+    if (running) rafId = requestAnimationFrame(loop);
+  }
+
+  function startGame() {
+    reset(); running = true; lastTick = 0;
+    if (overlay) overlay.style.display = "none";
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function endGame() {
+    running = false;
+    cancelAnimationFrame(rafId);
+    hiScore = Math.max(hiScore, score);
+    localStorage.setItem("sk-snake-hi", hiScore);
+    saveToHistory(score);
+    renderHistory();
+    renderBest();
+    if (overlay) {
+      overlay.querySelector(".overlay-title").textContent = "game over";
+      if (overlayScore) overlayScore.textContent = `score ${score} · best ${hiScore}`;
+      overlay.querySelector(".overlay-hint").textContent = "tap / click to restart";
+      overlay.style.display = "flex";
+    }
+  }
+
+  const DIRS = {
+    ArrowUp: { x: 0, y: -1 }, w: { x: 0, y: -1 },
+    ArrowDown: { x: 0, y: 1 }, s: { x: 0, y: 1 },
+    ArrowLeft: { x: -1, y: 0 }, a: { x: -1, y: 0 },
+    ArrowRight: { x: 1, y: 0 }, d: { x: 1, y: 0 },
+  };
+
+  document.addEventListener("keydown", e => {
+    if (document.getElementById("cmd-palette")?.classList.contains("open")) return;
+    if (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA") return;
+    if (!DIRS[e.key]) return;
+    if (!running) { startGame(); return; }
+    const d = DIRS[e.key];
+    if (d.x !== -dir.x || d.y !== -dir.y) nextDir = d;
+    e.preventDefault();
+  });
+
+  let t0 = null;
+  canvas.addEventListener("touchstart", e => { t0 = e.touches[0]; }, { passive: true });
+  canvas.addEventListener("touchend", e => {
+    if (!t0) return;
+    const dx = e.changedTouches[0].clientX - t0.clientX;
+    const dy = e.changedTouches[0].clientY - t0.clientY;
+    if (!running) { startGame(); t0 = null; return; }
+    if (Math.abs(dx) > Math.abs(dy)) { const d = dx > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 }; if (d.x !== -dir.x) nextDir = d; }
+    else { const d = dy > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 }; if (d.y !== -dir.y) nextDir = d; }
+    t0 = null;
+  }, { passive: true });
+
+  [canvas, overlay].forEach(el => el?.addEventListener("click", () => { if (!running) startGame(); }));
+  window.addEventListener("resize", () => { if (!running) reset(); });
+
+  // Skin picker
+  document.querySelectorAll(".skin-option").forEach(btn => {
+    if (btn.dataset.theme === currentTheme) btn.classList.add("active");
+    btn.addEventListener("click", () => {
+      currentTheme = btn.dataset.theme;
+      localStorage.setItem("sk-snake-theme", currentTheme);
+      document.querySelectorAll(".skin-option").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      if (!running) draw();
+    });
+  });
+
+  // Speed picker
+  document.querySelectorAll(".speed-btn").forEach(btn => {
+    if (btn.dataset.speed === currentSpeed) btn.classList.add("active");
+    btn.addEventListener("click", () => {
+      currentSpeed = btn.dataset.speed;
+      localStorage.setItem("sk-snake-speed", currentSpeed);
+      document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
+  renderHistory();
+  renderBest();
+  reset();
+})();
+
 // ===== FAQ Chatbot =====
 (() => {
   const FAQ = [
