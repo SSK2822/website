@@ -1483,6 +1483,41 @@ footer {
 }
 
 /* ===== Games ===== */
+.mobile-game-msg {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 56px 24px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--bg-elev);
+    text-align: center;
+    max-width: 480px;
+}
+
+.mobile-game-icon {
+    font-size: 2.4rem;
+    line-height: 1;
+}
+
+.mobile-game-title {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--fg);
+    margin: 0;
+}
+
+.mobile-game-sub {
+    font-size: 0.875rem;
+    color: var(--fg-muted);
+    margin: 0;
+    max-width: 320px;
+    line-height: 1.55;
+}
+
 .games-intro {
     color: var(--fg-muted);
     font-size: 0.98rem;
@@ -1750,9 +1785,15 @@ footer {
     color: var(--bg);
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1024px) {
+    .mobile-game-msg {
+        display: flex;
+    }
     .play-layout {
-        grid-template-columns: 1fr;
+        display: none;
+    }
+    .games-intro {
+        display: none;
     }
 }
 
