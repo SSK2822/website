@@ -330,7 +330,7 @@
 
   const ctx  = canvas.getContext("2d");
   const CELL = 18;
-  let cols, rows, snake, dir, nextDir, food, score, hiScore, running, rafId, lastTick;
+  let cols, rows, snake, dir, nextDir, food, score, hiScore, running, rafId, lastTick, dotGrid;
   hiScore = parseInt(localStorage.getItem("sk-snake-hi") || "0");
 
   function rrect(x, y, w, h, r) {
@@ -351,6 +351,18 @@
     const w = Math.floor((canvas.parentElement.clientWidth - 2) / CELL) * CELL;
     canvas.width = canvas.height = w;
     cols = rows = w / CELL;
+    buildDotGrid();
+  }
+
+  function buildDotGrid() {
+    const off = document.createElement("canvas");
+    off.width = canvas.width; off.height = canvas.height;
+    const oc = off.getContext("2d");
+    oc.fillStyle = "rgba(255,255,255,0.03)";
+    for (let x = 0; x < cols; x++) for (let y = 0; y < rows; y++) {
+      oc.beginPath(); oc.arc(x * CELL + CELL / 2, y * CELL + CELL / 2, 1, 0, Math.PI * 2); oc.fill();
+    }
+    dotGrid = off;
   }
 
   function reset() {
@@ -376,11 +388,8 @@
     const th = THEMES[currentTheme];
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // subtle dot grid
-    ctx.fillStyle = "rgba(255,255,255,0.03)";
-    for (let x = 0; x < cols; x++) for (let y = 0; y < rows; y++) {
-      ctx.beginPath(); ctx.arc(x * CELL + CELL / 2, y * CELL + CELL / 2, 1, 0, Math.PI * 2); ctx.fill();
-    }
+    // subtle dot grid (pre-rendered offscreen)
+    if (dotGrid) ctx.drawImage(dotGrid, 0, 0);
 
     // food
     ctx.save();
@@ -504,7 +513,18 @@
 
   renderHistory();
   renderBest();
-  reset();
+
+  // Defer init until the game section scrolls into view — avoids blocking page load
+  const _obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) { reset(); _obs.disconnect(); }
+  }, { threshold: 0.1 });
+  _obs.observe(canvas);
+
+  // Cancel the game loop when the tab is hidden or the page is unloading
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && running) { running = false; cancelAnimationFrame(rafId); }
+  });
+  window.addEventListener("beforeunload", () => cancelAnimationFrame(rafId));
 })();
 
 // ===== FAQ Chatbot =====
