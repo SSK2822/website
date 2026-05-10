@@ -81,42 +81,18 @@
   );
   sections.forEach((s) => sectionObs.observe(s));
 
-  // ===== Floating orbs — sine-wave drift, no scroll interference =====
-  const reduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
-  if (!reduceMotion) {
+  // ===== Floating orbs — sine-wave drift, GPU-composited via transform =====
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const isMobile = window.matchMedia("(max-width: 860px)").matches || navigator.maxTouchPoints > 1;
+
+  if (!reduceMotion && !isMobile) {
     const orbConfigs = [
-      {
-        el: document.querySelector(".orb-1"),
-        x0: -14,
-        y0: -14,
-        rx: 18,
-        ry: 22,
-        sx: 0.00023,
-        sy: 0.00031,
-      },
-      {
-        el: document.querySelector(".orb-2"),
-        x0: 72,
-        y0: 68,
-        rx: 20,
-        ry: 16,
-        sx: 0.00019,
-        sy: 0.00027,
-      },
-      {
-        el: document.querySelector(".orb-3"),
-        x0: 55,
-        y0: 30,
-        rx: 24,
-        ry: 20,
-        sx: 0.00015,
-        sy: 0.00021,
-      },
+      { el: document.querySelector(".orb-1"), x0: -14, y0: -14, rx: 18, ry: 22, sx: 0.00023, sy: 0.00031 },
+      { el: document.querySelector(".orb-2"), x0: 72,  y0: 68,  rx: 20, ry: 16, sx: 0.00019, sy: 0.00027 },
+      { el: document.querySelector(".orb-3"), x0: 55,  y0: 30,  rx: 24, ry: 20, sx: 0.00015, sy: 0.00021 },
     ];
 
-    // x0/y0 as % of viewport, rx/ry as px radius of drift
+    // Use transform (GPU-composited) instead of left/top (triggers layout)
     function tickOrbs(ts) {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
@@ -124,8 +100,7 @@
         if (!c.el) continue;
         const cx = (c.x0 / 100) * vw + Math.sin(ts * c.sx) * c.rx;
         const cy = (c.y0 / 100) * vh + Math.cos(ts * c.sy) * c.ry;
-        c.el.style.left = `${cx}px`;
-        c.el.style.top = `${cy}px`;
+        c.el.style.transform = `translate(${cx}px, ${cy}px)`;
       }
       requestAnimationFrame(tickOrbs);
     }
@@ -191,21 +166,31 @@
   const SEEN_KEY = "sk-cmdk-seen";
   if (sessionStorage.getItem(SEEN_KEY)) return;
 
+  // Adapt text to the platform
+  const isTouch = navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches;
+  const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  const textEl = hint.querySelector(".cmd-hint-text");
+  if (textEl) {
+    if (isTouch) {
+      textEl.innerHTML = `tap the <kbd>search icon</kbd> to explore`;
+    } else {
+      const key = isMac ? "⌘K" : "Ctrl+K";
+      textEl.innerHTML = `press <kbd>${key}</kbd> to jump anywhere`;
+    }
+  }
+
   const dismiss = () => {
     hint.classList.remove("visible");
     hint.classList.add("hiding");
     sessionStorage.setItem(SEEN_KEY, "1");
   };
 
-  // Show after a short delay so it doesn't appear while page is still loading
-  const showTimer = setTimeout(() => {
+  setTimeout(() => {
     hint.classList.add("visible");
-    // Auto-dismiss after 6s
     setTimeout(dismiss, 6000);
   }, 1800);
 
   close?.addEventListener("click", dismiss);
-  // Also dismiss when the user opens the palette
   document.addEventListener("keydown", e => {
     if ((e.metaKey || e.ctrlKey) && e.key === "k") dismiss();
   }, { once: true });

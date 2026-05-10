@@ -146,12 +146,13 @@ ul {
 .gradient-orb {
     position: fixed;
     border-radius: 50%;
-    filter: blur(90px);
+    filter: blur(70px);
     pointer-events: none;
     z-index: 0;
     will-change: transform;
     transition: opacity var(--t-slow);
     animation: orb-breathe 6s ease-in-out infinite;
+    contain: layout style;
 }
 
 .orb-1 {
@@ -1263,6 +1264,32 @@ footer {
 /* ===== Responsive ===== */
 @media (max-width: 860px) {
 
+    /* --- Performance: strip expensive GPU effects on mobile --- */
+    .orb-2, .orb-3 { display: none; }
+    .orb-1 {
+        width: 280px;
+        height: 280px;
+        filter: blur(40px);
+        opacity: 0.18;
+    }
+
+    .gradient-text {
+        /* freeze the shimmer — no per-frame repaint on mobile */
+        animation: none;
+        background-position: 0% center;
+    }
+
+    .hero-tag {
+        /* skip the float loop, keep only the entrance */
+        animation: fade-up-in 0.7s var(--ease) 0.08s both;
+    }
+
+    .site-header {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* --- About layout --- */
     .about-body {
         grid-template-columns: 1fr;
         gap: 36px;
