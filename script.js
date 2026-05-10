@@ -183,6 +183,35 @@
   }, { passive: true });
 })();
 
+// ===== Cmd+K hint toast (first visit) =====
+(() => {
+  const hint = document.getElementById("cmd-hint");
+  const close = document.getElementById("cmd-hint-close");
+  if (!hint) return;
+  const SEEN_KEY = "sk-cmdk-seen";
+  if (sessionStorage.getItem(SEEN_KEY)) return;
+
+  const dismiss = () => {
+    hint.classList.remove("visible");
+    hint.classList.add("hiding");
+    sessionStorage.setItem(SEEN_KEY, "1");
+  };
+
+  // Show after a short delay so it doesn't appear while page is still loading
+  const showTimer = setTimeout(() => {
+    hint.classList.add("visible");
+    // Auto-dismiss after 6s
+    setTimeout(dismiss, 6000);
+  }, 1800);
+
+  close?.addEventListener("click", dismiss);
+  // Also dismiss when the user opens the palette
+  document.addEventListener("keydown", e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "k") dismiss();
+  }, { once: true });
+  document.getElementById("cmd-trigger")?.addEventListener("click", dismiss, { once: true });
+})();
+
 // ===== Command Palette =====
 (() => {
   const COMMANDS = [
@@ -331,6 +360,7 @@
   const ctx  = canvas.getContext("2d");
   const CELL = 18;
   let cols, rows, snake, dir, nextDir, food, score, hiScore, running, rafId, lastTick, dotGrid;
+  let particles = [], popups = [], shakeFrames = 0;
   hiScore = parseInt(localStorage.getItem("sk-snake-hi") || "0");
 
   function rrect(x, y, w, h, r) {
@@ -365,6 +395,27 @@
     dotGrid = off;
   }
 
+  function spawnParticles(gx, gy, color, count = 12) {
+    const cx = gx * CELL + CELL / 2, cy = gy * CELL + CELL / 2;
+    for (let i = 0; i < count; i++) {
+      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.4;
+      const speed = 1.5 + Math.random() * 3.5;
+      particles.push({ x: cx, y: cy, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+        life: 1, decay: 0.035 + Math.random() * 0.03, size: 2 + Math.random() * 3, color });
+    }
+  }
+
+  function spawnPopup(gx, gy, text) {
+    popups.push({ x: gx * CELL + CELL / 2, y: gy * CELL - 2, text, life: 1, decay: 0.028 });
+  }
+
+  function updateParticles() {
+    particles = particles.filter(p => {
+      p.x += p.vx; p.y += p.vy; p.vx *= 0.91; p.vy *= 0.91; p.life -= p.decay; return p.life > 0;
+    });
+    popups = popups.filter(p => { p.y -= 0.9; p.life -= p.decay; return p.life > 0; });
+  }
+
   function reset() {
     resize();
     const mx = Math.floor(cols / 2), my = Math.floor(rows / 2);
@@ -386,16 +437,29 @@
 
   function draw() {
     const th = THEMES[currentTheme];
+    const now = performance.now();
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // subtle dot grid (pre-rendered offscreen)
+    ctx.save();
+    if (shakeFrames > 0) {
+      const mag = shakeFrames * 0.45;
+      ctx.translate((Math.random() - 0.5) * mag, (Math.random() - 0.5) * mag);
+      shakeFrames--;
+    }
+
+    // dot grid
     if (dotGrid) ctx.drawImage(dotGrid, 0, 0);
 
-    // food
+    // food — pulsing glow
+    const pulse = 0.55 + 0.45 * Math.sin(now * 0.004);
     ctx.save();
-    ctx.shadowColor = th.foodGlow; ctx.shadowBlur = 14;
+    ctx.shadowColor = th.foodGlow; ctx.shadowBlur = 8 + 14 * pulse;
     ctx.fillStyle = th.food;
-    rrect(food.x * CELL + 4, food.y * CELL + 4, CELL - 8, CELL - 8, 4);
+    const foodScale = 1 + 0.08 * pulse;
+    const fPad = 4 - (foodScale - 1) * CELL * 0.5;
+    const fSize = (CELL - 8) * foodScale;
+    rrect(food.x * CELL + fPad, food.y * CELL + fPad, fSize, fSize, 4);
     ctx.fill();
     ctx.restore();
 
@@ -411,7 +475,44 @@
       rrect(seg.x * CELL + 2, seg.y * CELL + 2, CELL - 4, CELL - 4, i === 0 ? 6 : 4);
       ctx.fill();
       ctx.restore();
+
+      // eyes on head
+      if (i === 0) {
+        const cx = seg.x * CELL + CELL / 2, cy = seg.y * CELL + CELL / 2;
+        const e1x = cx + dir.x * 3 + (-dir.y) * 3, e1y = cy + dir.y * 3 + dir.x * 3;
+        const e2x = cx + dir.x * 3 + dir.y * 3,    e2y = cy + dir.y * 3 + (-dir.x) * 3;
+        ctx.fillStyle = "white";
+        ctx.beginPath(); ctx.arc(e1x, e1y, 2.2, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(e2x, e2y, 2.2, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#111";
+        ctx.beginPath(); ctx.arc(e1x + dir.x, e1y + dir.y, 1.1, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(e2x + dir.x, e2y + dir.y, 1.1, 0, Math.PI * 2); ctx.fill();
+      }
     });
+
+    // particles
+    particles.forEach(p => {
+      ctx.save();
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    });
+
+    // score popups
+    const th2 = THEMES[currentTheme];
+    popups.forEach(p => {
+      ctx.save();
+      ctx.globalAlpha = p.life;
+      ctx.font = `bold 13px monospace`;
+      ctx.fillStyle = th2.food;
+      ctx.textAlign = "center";
+      ctx.shadowColor = th2.foodGlow; ctx.shadowBlur = 8;
+      ctx.fillText(p.text, p.x, p.y);
+      ctx.restore();
+    });
+
+    ctx.restore();
   }
 
   function tick() {
@@ -424,14 +525,18 @@
     if (head.x === food.x && head.y === food.y) {
       score++;
       if (scoreEl) scoreEl.textContent = score;
+      spawnParticles(food.x, food.y, THEMES[currentTheme].food, 14);
+      spawnPopup(food.x, food.y, "+1");
       spawnFood();
     } else { snake.pop(); }
-    draw();
   }
 
   function loop(ts) {
     if (ts - lastTick >= SPEEDS[currentSpeed]) { tick(); lastTick = ts; }
-    if (running) rafId = requestAnimationFrame(loop);
+    if (!running) return;
+    updateParticles();
+    draw();
+    rafId = requestAnimationFrame(loop);
   }
 
   function startGame() {
@@ -448,12 +553,28 @@
     saveToHistory(score);
     renderHistory();
     renderBest();
-    if (overlay) {
-      overlay.querySelector(".overlay-title").textContent = "game over";
-      if (overlayScore) overlayScore.textContent = `score ${score} · best ${hiScore}`;
-      overlay.querySelector(".overlay-hint").textContent = "tap / click to restart";
-      overlay.style.display = "flex";
-    }
+
+    // Death burst: shake + scatter particles from every segment
+    shakeFrames = 18;
+    const deathColor = THEMES[currentTheme].food;
+    snake.forEach(seg => spawnParticles(seg.x, seg.y, deathColor, 3));
+
+    // Animate the burst for ~700ms before showing the overlay
+    let burstRaf, frame = 0;
+    const renderBurst = () => {
+      updateParticles(); draw(); frame++;
+      if (frame < 44) { burstRaf = requestAnimationFrame(renderBurst); }
+      else {
+        cancelAnimationFrame(burstRaf);
+        if (overlay) {
+          overlay.querySelector(".overlay-title").textContent = "game over";
+          if (overlayScore) overlayScore.textContent = `score ${score} · best ${hiScore}`;
+          overlay.querySelector(".overlay-hint").textContent = "tap / click to restart";
+          overlay.style.display = "flex";
+        }
+      }
+    };
+    requestAnimationFrame(renderBurst);
   }
 
   const DIRS = {

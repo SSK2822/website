@@ -62,7 +62,7 @@
         </header>
 
         <main>
-            <section id="hero" class="hero reveal">
+            <section id="hero" class="hero">
                 <div class="hero-tag">
                     <span class="pulse"></span>
                     <span>building @ morgan stanley</span>
@@ -90,16 +90,6 @@
                     </a>
                     <a href="#contact" class="btn btn-ghost">get in touch</a>
                 </div>
-                <div class="hero-meta">
-                    <div class="meta-item"><span
-                            class="meta-k">based</span><span
-                            class="meta-v">NYC</span></div>
-                    <div class="meta-item"><span
-                            class="meta-k">role</span><span
-                            class="meta-v">SWE</span></div>
-                    <div class="meta-item"><span class="meta-k">grad</span><span
-                            class="meta-v">Columbia '25</span></div>
-                </div>
             </section>
 
             <section id="about" class="section reveal">
@@ -107,31 +97,39 @@
                     <span class="section-idx">01</span>
                     <h2>about me</h2>
                 </div>
-                <div class="about-grid">
-                    <div class="about-card card-primary">
-                        <div class="card-emoji">🚀</div>
-                        <h3>the short version</h3>
-                        <p>Software Engineer Analyst at Morgan Stanley, Columbia
-                            CS grad. I work on AI-driven CRM tooling,
-                            prompt engineering, and backend systems — and I love
-                            applying quantitative thinking to hard problems.</p>
+                <div class="about-body">
+                    <div class="about-text">
+                        <p class="about-lead">I'm Shreyash (Yash), a software engineer at Morgan Stanley building systems at the intersection of <mark class="hi">LLMs</mark>, <mark class="hi">backend engineering</mark>, and <mark class="hi">financial data</mark>. Columbia CS '25, NYC-based, and perpetually curious about what happens when you put quantitative thinking inside production software.</p>
+                        <p>My day-to-day involves shipping production-grade features: AI-driven CRM tooling, prompt engineering pipelines, and backend services that touch real markets. Before Morgan Stanley, quant research at CoinLion and data analytics at HSBC taught me to care deeply about what numbers actually mean, and how to make the systems around them fast and reliable.</p>
+                        <p>Outside the terminal, I run multicultural community programs and spent years as a Resident Adviser supporting 600+ undergrads. I believe the best technology includes everyone. Long walks reset my brain. Celsius keeps it running.</p>
+                        <div class="about-tags">
+                            <span>AI / LLMs</span>
+                            <span>Quant research</span>
+                            <span>Backend systems</span>
+                            <span>Prompt engineering</span>
+                            <span>Python</span>
+                            <span>Go</span>
+                            <span>TypeScript</span>
+                            <span>Community</span>
+                        </div>
                     </div>
-                    <div class="about-card">
-                        <div class="card-emoji">💼</div>
-                        <h3>what i build</h3>
-                        <p>Production-grade AI/LLM features, data pipelines,
-                            and backend services at Morgan Stanley. Previously
-                            quant research at CoinLion and data analytics at
-                            HSBC. I care about things that actually ship.</p>
-                    </div>
-                    <div class="about-card">
-                        <div class="card-emoji">🌐</div>
-                        <h3>what i care about</h3>
-                        <p>Multicultural community-building, mentorship, and
-                            making tech more inclusive. Former RA supporting
-                            600+
-                            undergrads. Walking clears my head; Celsius keeps
-                            me going.</p>
+                    <div class="about-aside">
+                        <div class="about-stat">
+                            <span class="stat-val">New York City</span>
+                            <span class="stat-lbl">based</span>
+                        </div>
+                        <div class="about-stat">
+                            <span class="stat-val">Columbia '25</span>
+                            <span class="stat-lbl">computer science</span>
+                        </div>
+                        <div class="about-stat">
+                            <span class="stat-val">Morgan Stanley</span>
+                            <span class="stat-lbl">SWE Analyst</span>
+                        </div>
+                        <div class="about-stat about-stat--accent">
+                            <span class="stat-val">open to</span>
+                            <span class="stat-lbl">interesting problems</span>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -687,5 +685,12 @@
                 <p class="built">vanilla html · css · js</p>
             </div>
         </footer>
+
+        <!-- Cmd+K first-visit hint -->
+        <div class="cmd-hint" id="cmd-hint" role="status" aria-live="polite">
+            <span class="cmd-hint-icon">⌘</span>
+            <span>press <kbd>⌘K</kbd> to jump anywhere on this page</span>
+            <button class="cmd-hint-close" id="cmd-hint-close" aria-label="Dismiss">✕</button>
+        </div>
     </body>
 </html>
