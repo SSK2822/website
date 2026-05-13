@@ -1271,22 +1271,41 @@ footer {
         height: 280px;
         filter: blur(40px);
         opacity: 0.18;
+        /* Explicit position so it doesn't sit at 0,0 covering nav */
+        top: -90px;
+        right: -90px;
+        left: auto;
     }
 
     .gradient-text {
-        /* freeze the shimmer — no per-frame repaint on mobile */
         animation: none;
         background-position: 0% center;
     }
 
-    .hero-tag {
-        /* skip the float loop, keep only the entrance */
-        animation: fade-up-in 0.7s var(--ease) 0.08s both;
+    /* --- Skip hero stagger animations on mobile entirely.
+       Safari iOS sometimes fails to start animations that begin at opacity:0,
+       leaving the page blank. Force everything visible. --- */
+    .hero .hero-tag,
+    .hero .hero-title,
+    .hero .hero-copy,
+    .hero .hero-cta,
+    .hero .hero-meta {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
     }
 
     .site-header {
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* Toast: never wider than the viewport */
+    .cmd-hint {
+        max-width: calc(100vw - 24px);
+        white-space: normal;
+        text-align: center;
+        font-size: 0.74rem;
     }
 
     /* --- About layout --- */

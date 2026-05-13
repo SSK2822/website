@@ -4,9 +4,14 @@
   const root = document.documentElement;
   const STORAGE_KEY = "sk-theme";
 
+  // ===== Safe storage helpers — iOS Safari private mode throws on localStorage access,
+  // which would otherwise kill this entire IIFE and freeze the reveal observer. =====
+  const safeGet = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
+  const safeSet = (k, v) => { try { localStorage.setItem(k, v); } catch { /* ignore */ } };
+
   // ===== Theme: persist across sessions, respect OS preference on first load =====
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-  const stored = localStorage.getItem(STORAGE_KEY);
+  const stored = safeGet(STORAGE_KEY);
   const initial = stored || (prefersDark.matches ? "dark" : "light");
   root.setAttribute("data-theme", initial);
 
@@ -14,11 +19,11 @@
   themeBtn?.addEventListener("click", () => {
     const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
-    localStorage.setItem(STORAGE_KEY, next);
+    safeSet(STORAGE_KEY, next);
   });
 
   prefersDark.addEventListener("change", (e) => {
-    if (!localStorage.getItem(STORAGE_KEY)) {
+    if (!safeGet(STORAGE_KEY)) {
       root.setAttribute("data-theme", e.matches ? "dark" : "light");
     }
   });
@@ -164,7 +169,9 @@
   const close = document.getElementById("cmd-hint-close");
   if (!hint) return;
   const SEEN_KEY = "sk-cmdk-seen";
-  if (sessionStorage.getItem(SEEN_KEY)) return;
+  const ssGet = (k) => { try { return sessionStorage.getItem(k); } catch { return null; } };
+  const ssSet = (k, v) => { try { sessionStorage.setItem(k, v); } catch { /* ignore */ } };
+  if (ssGet(SEEN_KEY)) return;
 
   // Adapt text to the platform
   const isTouch = navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches;
@@ -182,7 +189,7 @@
   const dismiss = () => {
     hint.classList.remove("visible");
     hint.classList.add("hiding");
-    sessionStorage.setItem(SEEN_KEY, "1");
+    ssSet(SEEN_KEY, "1");
   };
 
   setTimeout(() => {
@@ -308,8 +315,11 @@
   };
   const SPEEDS = { slow: 200, normal: 130, fast: 75 };
 
-  let currentTheme = localStorage.getItem("sk-snake-theme") || "drift";
-  let currentSpeed = localStorage.getItem("sk-snake-speed") || "normal";
+  const lsGet = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch { /* ignore */ } };
+
+  let currentTheme = lsGet("sk-snake-theme") || "drift";
+  let currentSpeed = lsGet("sk-snake-speed") || "normal";
   if (!THEMES[currentTheme]) currentTheme = "drift";
   if (!SPEEDS[currentSpeed]) currentSpeed = "normal";
 
@@ -321,7 +331,7 @@
     const h = getHistory();
     h.unshift(s);
     if (h.length > 8) h.length = 8;
-    localStorage.setItem("sk-snake-history", JSON.stringify(h));
+    lsSet("sk-snake-history", JSON.stringify(h));
   }
   function renderHistory() {
     const el = document.getElementById("score-history");
@@ -346,7 +356,7 @@
   const CELL = 18;
   let cols, rows, snake, dir, nextDir, food, score, hiScore, running, rafId, lastTick, dotGrid;
   let particles = [], popups = [], shakeFrames = 0;
-  hiScore = parseInt(localStorage.getItem("sk-snake-hi") || "0");
+  hiScore = parseInt(lsGet("sk-snake-hi") || "0");
 
   function rrect(x, y, w, h, r) {
     ctx.beginPath();
@@ -534,7 +544,7 @@
     running = false;
     cancelAnimationFrame(rafId);
     hiScore = Math.max(hiScore, score);
-    localStorage.setItem("sk-snake-hi", hiScore);
+    lsSet("sk-snake-hi", hiScore);
     saveToHistory(score);
     renderHistory();
     renderBest();
@@ -599,7 +609,7 @@
     if (btn.dataset.theme === currentTheme) btn.classList.add("active");
     btn.addEventListener("click", () => {
       currentTheme = btn.dataset.theme;
-      localStorage.setItem("sk-snake-theme", currentTheme);
+      lsSet("sk-snake-theme", currentTheme);
       document.querySelectorAll(".skin-option").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       if (!running) draw();
@@ -611,7 +621,7 @@
     if (btn.dataset.speed === currentSpeed) btn.classList.add("active");
     btn.addEventListener("click", () => {
       currentSpeed = btn.dataset.speed;
-      localStorage.setItem("sk-snake-speed", currentSpeed);
+      lsSet("sk-snake-speed", currentSpeed);
       document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
     });
