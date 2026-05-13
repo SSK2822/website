@@ -86,31 +86,7 @@
   );
   sections.forEach((s) => sectionObs.observe(s));
 
-  // ===== Floating orbs — sine-wave drift, GPU-composited via transform =====
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const isMobile = window.matchMedia("(max-width: 860px)").matches || navigator.maxTouchPoints > 1;
-
-  if (!reduceMotion && !isMobile) {
-    const orbConfigs = [
-      { el: document.querySelector(".orb-1"), x0: -14, y0: -14, rx: 18, ry: 22, sx: 0.00023, sy: 0.00031 },
-      { el: document.querySelector(".orb-2"), x0: 72,  y0: 68,  rx: 20, ry: 16, sx: 0.00019, sy: 0.00027 },
-      { el: document.querySelector(".orb-3"), x0: 55,  y0: 30,  rx: 24, ry: 20, sx: 0.00015, sy: 0.00021 },
-    ];
-
-    // Use transform (GPU-composited) instead of left/top (triggers layout)
-    function tickOrbs(ts) {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      for (const c of orbConfigs) {
-        if (!c.el) continue;
-        const cx = (c.x0 / 100) * vw + Math.sin(ts * c.sx) * c.rx;
-        const cy = (c.y0 / 100) * vh + Math.cos(ts * c.sy) * c.ry;
-        c.el.style.transform = `translate(${cx}px, ${cy}px)`;
-      }
-      requestAnimationFrame(tickOrbs);
-    }
-    requestAnimationFrame(tickOrbs);
-  }
+  // Orbs are now static via CSS — no JS animation loop.
 
   // ===== Contact form — mailto-based submission =====
   const form = document.querySelector("#contact-form");

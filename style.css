@@ -100,19 +100,6 @@ ul {
     color: #fff;
 }
 
-/* ===== Keyframe animations ===== */
-@keyframes orb-breathe {
-
-    0%,
-    100% {
-        opacity: 0.28;
-    }
-
-    50% {
-        opacity: 0.42;
-    }
-}
-
 /* ===== Ambient decoration ===== */
 .noise {
     position: fixed;
@@ -143,44 +130,45 @@ ul {
     opacity: 0;
 }
 
+/* Static gradient orbs — no animation, no JS positioning */
 .gradient-orb {
     position: fixed;
     border-radius: 50%;
-    filter: blur(70px);
+    filter: blur(80px);
     pointer-events: none;
     z-index: 0;
-    will-change: transform;
-    transition: opacity var(--t-slow);
-    animation: orb-breathe 6s ease-in-out infinite;
     contain: layout style;
 }
 
 .orb-1 {
-    width: 560px;
-    height: 560px;
+    width: 520px;
+    height: 520px;
     background: radial-gradient(circle, #ff5a1f 0%, #ff3a6e 50%, transparent 70%);
-    opacity: 0.32;
-    animation-delay: 0s;
+    opacity: 0.28;
+    top: -180px;
+    left: -160px;
 }
 
 .orb-2 {
-    width: 520px;
-    height: 520px;
+    width: 480px;
+    height: 480px;
     background: radial-gradient(circle, #7c3aed 0%, #4f46e5 50%, transparent 70%);
-    opacity: 0.28;
-    animation-delay: -2s;
+    opacity: 0.24;
+    bottom: -160px;
+    right: -140px;
 }
 
 .orb-3 {
-    width: 420px;
-    height: 420px;
+    width: 380px;
+    height: 380px;
     background: radial-gradient(circle, #06b6d4 0%, #0ea5e9 40%, transparent 70%);
-    opacity: 0.25;
-    animation-delay: -4s;
+    opacity: 0.18;
+    top: 30%;
+    right: 20%;
 }
 
 [data-theme="light"] .gradient-orb {
-    opacity: 0.12;
+    opacity: 0.10;
 }
 
 /* ===== Header / nav ===== */
@@ -378,18 +366,6 @@ main {
     vertical-align: middle;
 }
 
-/* ===== Hero stagger on load ===== */
-@keyframes fade-up-in {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-.hero .hero-tag   { animation: fade-up-in 0.7s var(--ease) 0.08s both; }
-.hero .hero-title { animation: fade-up-in 0.8s var(--ease) 0.2s both; }
-.hero .hero-copy  { animation: fade-up-in 0.7s var(--ease) 0.34s both; }
-.hero .hero-cta   { animation: fade-up-in 0.7s var(--ease) 0.46s both; }
-.hero .hero-meta  { animation: fade-up-in 0.7s var(--ease) 0.56s both; }
-
 /* ===== Hero ===== */
 .hero {
     padding: 120px 0 96px;
@@ -410,12 +386,6 @@ main {
     font-size: 0.78rem;
     color: var(--fg-muted);
     width: fit-content;
-    animation: fade-up-in 0.7s var(--ease) 0.08s both, hero-tag-float 4s ease-in-out 1s infinite;
-}
-
-@keyframes hero-tag-float {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-5px); }
 }
 
 .pulse {
@@ -479,25 +449,11 @@ main {
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, #ff5a1f 0%, #ff2d95 35%, #7c3aed 65%, #ff5a1f 100%);
-    background-size: 220% auto;
+    background: var(--gradient);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    animation: shimmer 5s linear infinite;
-}
-
-@keyframes shimmer {
-    0%   { background-position: 0% center; }
-    100% { background-position: 220% center; }
-}
-
-[data-theme="dark"] .gradient-text {
-    background: linear-gradient(135deg, #ff6b3d 0%, #ff4d9d 35%, #a78bfa 65%, #ff6b3d 100%);
-    background-size: 220% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
 }
 
 .hero-copy {
@@ -1262,37 +1218,36 @@ footer {
 }
 
 /* ===== Responsive ===== */
+
+/* Narrow desktop / tablet — about sidebar tightens, orbs shrink a bit */
+@media (max-width: 1024px) {
+
+    .about-body {
+        grid-template-columns: 1fr 200px;
+        gap: 40px;
+    }
+
+    .gradient-orb {
+        filter: blur(60px);
+    }
+
+    .orb-1 { width: 380px; height: 380px; }
+    .orb-2 { width: 360px; height: 360px; }
+    .orb-3 { display: none; }
+}
+
 @media (max-width: 860px) {
 
-    /* --- Performance: strip expensive GPU effects on mobile --- */
-    .orb-2, .orb-3 { display: none; }
+    /* Hide the 2nd orb too — one static orb is enough atmosphere */
+    .orb-2 { display: none; }
     .orb-1 {
-        width: 280px;
-        height: 280px;
+        width: 260px;
+        height: 260px;
         filter: blur(40px);
         opacity: 0.18;
-        /* Explicit position so it doesn't sit at 0,0 covering nav */
-        top: -90px;
-        right: -90px;
+        top: -80px;
+        right: -80px;
         left: auto;
-    }
-
-    .gradient-text {
-        animation: none;
-        background-position: 0% center;
-    }
-
-    /* --- Skip hero stagger animations on mobile entirely.
-       Safari iOS sometimes fails to start animations that begin at opacity:0,
-       leaving the page blank. Force everything visible. --- */
-    .hero .hero-tag,
-    .hero .hero-title,
-    .hero .hero-copy,
-    .hero .hero-cta,
-    .hero .hero-meta {
-        animation: none !important;
-        opacity: 1 !important;
-        transform: none !important;
     }
 
     .site-header {
@@ -1503,8 +1458,6 @@ footer {
     font-family: var(--font-mono);
     font-size: 0.74rem;
     transition: border-color var(--t-fast), color var(--t-fast), box-shadow var(--t-fast), transform var(--t-fast);
-    box-shadow: 0 0 0 0 rgba(255, 90, 31, 0);
-    animation: cmd-beacon 4s ease-in-out infinite;
 }
 
 .cmd-trigger:hover {
@@ -1512,17 +1465,11 @@ footer {
     color: var(--accent);
     transform: translateY(-1px);
     box-shadow: 0 0 14px rgba(255, 90, 31, 0.22);
-    animation: none;
 }
 
 .cmd-trigger svg {
     width: 13px;
     height: 13px;
-}
-
-@keyframes cmd-beacon {
-    0%, 60%, 100% { box-shadow: 0 0 0 0 rgba(255, 90, 31, 0); }
-    30%            { box-shadow: 0 0 0 5px rgba(255, 90, 31, 0.14); }
 }
 
 /* ===== Command Palette ===== */
