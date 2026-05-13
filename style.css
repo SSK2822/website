@@ -1190,14 +1190,16 @@ footer {
     letter-spacing: 0.06em;
 }
 
-/* ===== Reveal-on-scroll ===== */
-.reveal {
+/* ===== Reveal-on-scroll =====
+   Scoped under .js so that if the inline boot script in <head> doesn't run
+   (JS disabled / broken / cached old build), content is visible by default. */
+.js .reveal {
     opacity: 0;
     transform: translateY(24px);
     transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
 }
 
-.reveal.in-view {
+.js .reveal.in-view {
     opacity: 1;
     transform: translateY(0);
 }

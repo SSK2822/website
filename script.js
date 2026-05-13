@@ -48,18 +48,30 @@
 
   // ===== Reveal on scroll =====
   const revealEls = document.querySelectorAll(".reveal");
-  const revealObs = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in-view");
-          revealObs.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
-  );
-  revealEls.forEach((el) => revealObs.observe(el));
+  const showAll = () => revealEls.forEach((el) => el.classList.add("in-view"));
+
+  if ("IntersectionObserver" in window) {
+    const revealObs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            revealObs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+    );
+    revealEls.forEach((el) => revealObs.observe(el));
+  } else {
+    // Old browser without IntersectionObserver — just show everything.
+    showAll();
+  }
+
+  // Final safety net: if anything below this point in the IIFE throws, or the
+  // observer somehow never fires, force-show all sections after 2s so the page
+  // is never stuck blank.
+  setTimeout(showAll, 2000);
 
   // ===== Section tracking for active nav link =====
   const navLinks = Array.from(
