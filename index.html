@@ -39,14 +39,9 @@
                         <li><a href="#projects">projects</a></li>
                         <li><a href="#leadership">leadership</a></li>
                         <li><a href="#skills">skills</a></li>
-                        <li><a href="#play">play</a></li>
                         <li><a href="#contact">contact</a></li>
                     </ul>
                 </nav>
-                <button class="cmd-trigger" id="cmd-trigger" aria-label="Open command palette (⌘K)">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                    <span>⌘K</span>
-                </button>
                 <button class="theme-toggle" aria-label="Toggle theme">
                     <svg class="icon-sun" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2"
@@ -482,73 +477,6 @@
                     </div>
                 </div>
             </section>
-
-            <section id="play" class="section reveal">
-                <div class="section-head">
-                    <span class="section-idx">07</span>
-                    <h2>play</h2>
-                </div>
-                <p class="games-intro">take a break from the resume. pick a skin and go.</p>
-                <div class="mobile-game-msg">
-                    <span class="mobile-game-icon">🕹️</span>
-                    <p class="mobile-game-title">better on a real keyboard</p>
-                    <p class="mobile-game-sub">snake is a desktop-only experience — grab a laptop and come back. your high score will wait.</p>
-                </div>
-                <div class="play-layout">
-                    <div class="game-card">
-                        <div class="game-header">
-                            <div>
-                                <h3 class="game-title">snake</h3>
-                                <p class="game-hint">arrows / wasd</p>
-                            </div>
-                            <div class="game-score-wrap">
-                                <span class="game-score-label">score</span>
-                                <span class="game-score-val" id="snake-score">0</span>
-                            </div>
-                        </div>
-                        <div class="snake-wrap">
-                            <canvas id="snake-canvas"></canvas>
-                            <div class="game-overlay" id="snake-overlay">
-                                <span class="overlay-title">snake</span>
-                                <span class="overlay-score" id="snake-overlay-score"></span>
-                                <span class="overlay-hint">tap / click to start</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="snake-sidebar">
-                        <div class="sidebar-block">
-                            <span class="sidebar-label">best</span>
-                            <span class="sidebar-best" id="snake-best">0</span>
-                        </div>
-                        <div class="sidebar-block">
-                            <span class="sidebar-label">recent</span>
-                            <div class="score-history" id="score-history">
-                                <span class="history-empty">no games yet</span>
-                            </div>
-                        </div>
-                        <div class="sidebar-block">
-                            <span class="sidebar-label">skin</span>
-                            <div class="skin-picker" id="skin-picker">
-                                <button class="skin-option" data-theme="drift"  style="--dot:linear-gradient(135deg,#ff6b3d,#a78bfa)">drift</button>
-                                <button class="skin-option" data-theme="matrix" style="--dot:#00ff41">matrix</button>
-                                <button class="skin-option" data-theme="neon"   style="--dot:linear-gradient(135deg,#00d4ff,#ff00ff)">neon</button>
-                                <button class="skin-option" data-theme="fire"   style="--dot:linear-gradient(135deg,#ffcc00,#ff2200)">fire</button>
-                                <button class="skin-option" data-theme="candy"  style="--dot:linear-gradient(135deg,#ff69b4,#c71585)">candy</button>
-                                <button class="skin-option" data-theme="ghost"  style="--dot:linear-gradient(135deg,#e0e0e0,#606060)">ghost</button>
-                            </div>
-                        </div>
-                        <div class="sidebar-block">
-                            <span class="sidebar-label">speed</span>
-                            <div class="speed-picker" id="speed-picker">
-                                <button class="speed-btn" data-speed="slow">slow</button>
-                                <button class="speed-btn" data-speed="normal">normal</button>
-                                <button class="speed-btn" data-speed="fast">fast</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <section id="contact" class="section reveal">
                 <div class="section-head">
                     <span class="section-idx">08</span>
@@ -614,24 +542,6 @@
             </section>
         </main>
 
-        <!-- ===== Command Palette ===== -->
-        <div id="cmd-palette" class="cmd-palette" aria-hidden="true" role="dialog" aria-label="Command palette">
-            <div class="cmd-backdrop" id="cmd-backdrop"></div>
-            <div class="cmd-modal">
-                <div class="cmd-search-row">
-                    <svg class="cmd-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                    <input type="text" id="cmd-input" class="cmd-input" placeholder="search or jump to..." autocomplete="off" spellcheck="false">
-                    <kbd class="cmd-esc-key">esc</kbd>
-                </div>
-                <div class="cmd-results" id="cmd-results"></div>
-                <div class="cmd-footer">
-                    <span><kbd>↑↓</kbd> navigate</span>
-                    <span><kbd>↵</kbd> open</span>
-                    <span><kbd>esc</kbd> close</span>
-                </div>
-            </div>
-        </div>
-
         <!-- ===== FAQ Chatbot ===== -->
         <button id="chatbot-bubble" class="chatbot-bubble" aria-label="Ask me anything" aria-expanded="false">
             <svg class="chat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -688,12 +598,5 @@
                 <p class="built">vanilla html · css · js</p>
             </div>
         </footer>
-
-        <!-- Cmd+K first-visit hint -->
-        <div class="cmd-hint" id="cmd-hint" role="status" aria-live="polite">
-            <span class="cmd-hint-icon">⌘</span>
-            <span class="cmd-hint-text">press <kbd>⌘K</kbd> to jump anywhere</span>
-            <button class="cmd-hint-close" id="cmd-hint-close" aria-label="Dismiss">✕</button>
-        </div>
     </body>
 </html>
